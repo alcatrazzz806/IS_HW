@@ -95,10 +95,10 @@ public class PlayfairCipher {
 			if (Character.toLowerCase(x) == Character.toLowerCase(y)) {
 				int x_index = (Character.isLowerCase(x)) ? key.indexOf(x) : 
 					key.indexOf(Character.toLowerCase(x));
-				char x_cipher = (Character.isLowerCase(x)) ? key.charAt(((x_index + 5 - 1) % 5) + (5 * (x_index / 5))) : 
+				char x_plain = (Character.isLowerCase(x)) ? key.charAt(((x_index + 5 - 1) % 5) + (5 * (x_index / 5))) : 
 					Character.toUpperCase(key.charAt(((x_index + 5 - 1) % 5) + (5 * (x_index / 5))));
-				char y_cipher = (Character.isLowerCase(y)) ? x_cipher : Character.toUpperCase(x_cipher);
-				plaintext += x_cipher; plaintext += y_cipher;
+				char y_plain = (Character.isLowerCase(y)) ? x_plain : Character.toUpperCase(x_plain);
+				plaintext += x_plain; plaintext += y_plain;
 			}
 			
 			else {
@@ -106,27 +106,27 @@ public class PlayfairCipher {
 				int y_index = (Character.isLowerCase(y)) ? key.indexOf(y) : key.indexOf(Character.toLowerCase(y));
 				
 				if (x_index/5 == y_index/5) {
-					char x_cipher = (Character.isLowerCase(x)) ? key.charAt(((x_index + 5 - 1) % 5) + (5 * (x_index / 5))) : 
+					char x_plain = (Character.isLowerCase(x)) ? key.charAt(((x_index + 5 - 1) % 5) + (5 * (x_index / 5))) : 
 						Character.toUpperCase(key.charAt(((x_index + 5 - 1) % 5) + (5 * (x_index / 5))));
-					char y_cipher = (Character.isLowerCase(y)) ? key.charAt(((y_index + 5 - 1) % 5) + (5 * (y_index / 5))) :
+					char y_plain = (Character.isLowerCase(y)) ? key.charAt(((y_index + 5 - 1) % 5) + (5 * (y_index / 5))) :
 						Character.toUpperCase(key.charAt(((y_index + 5 - 1) % 5) + (5 * (y_index / 5))));
-					plaintext += x_cipher; plaintext += y_cipher;
+					plaintext += x_plain; plaintext += y_plain;
 				}
 				
 				else if (x_index%5 == y_index%5) {
-					char x_cipher = (Character.isLowerCase(x)) ? key.charAt((y_index % 5) + (5 * (((x_index / 5) + 5 - 1) % 5))) : 
+					char x_plain = (Character.isLowerCase(x)) ? key.charAt((y_index % 5) + (5 * (((x_index / 5) + 5 - 1) % 5))) : 
 						Character.toUpperCase(key.charAt((y_index % 5) + (5 * (((x_index / 5) + 5 - 1) % 5))));
-					char y_cipher = (Character.isLowerCase(y)) ? key.charAt((x_index % 5) + (5 * (((y_index / 5) + 5 - 1) % 5))) :
+					char y_plain = (Character.isLowerCase(y)) ? key.charAt((x_index % 5) + (5 * (((y_index / 5) + 5 - 1) % 5))) :
 						Character.toUpperCase(key.charAt((x_index % 5) + (5 * (((y_index / 5) + 5 - 1) % 5))));
-					plaintext += x_cipher; plaintext += y_cipher;
+					plaintext += x_plain; plaintext += y_plain;
 				}
 				
 				else {
-					char x_cipher = (Character.isLowerCase(x)) ? key.charAt((y_index % 5) + (5 * (x_index / 5))) : 
+					char x_plain = (Character.isLowerCase(x)) ? key.charAt((y_index % 5) + (5 * (x_index / 5))) : 
 						Character.toUpperCase(key.charAt((y_index % 5) + (5 * (x_index / 5))));
-					char y_cipher = (Character.isLowerCase(y)) ? key.charAt((x_index % 5) + (5 * (y_index / 5))) :
+					char y_plain = (Character.isLowerCase(y)) ? key.charAt((x_index % 5) + (5 * (y_index / 5))) :
 						Character.toUpperCase(key.charAt((x_index % 5) + (5 * (y_index / 5))));
-					plaintext += x_cipher; plaintext += y_cipher;
+					plaintext += x_plain; plaintext += y_plain;
 				}
 			}
 			remaining = remaining.substring(2);

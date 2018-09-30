@@ -1,7 +1,6 @@
 package hw1;
 
-import hw1.MonoalphabeticCipher;
-import hw1.PlayfairCipher;
+import hw1.*;
 
 public class CaesarCipher {
 	private char getChar(char c, int key, boolean en) {
@@ -75,5 +74,15 @@ public class CaesarCipher {
 		decrypted = playfair.decrypt(ciphertext);
 		System.out.println("Decrypted: " + decrypted);
 		playfair = null; playfair_key = null;
+		
+		String vernam_key = "COM";
+		VernamCipher vernam = new VernamCipher();
+		vernam.setKey(vernam_key);
+		System.out.println("\nEncrypt using Vernam Cipher with key of " + vernam_key + "...");
+		ciphertext = vernam.encrypt(plaintext);
+		System.out.println("Ciphertext: " + ciphertext);
+		decrypted = vernam.decrypt(ciphertext);
+		System.out.println("Decrypted: " + decrypted);
+		vernam = null; vernam_key = null;
 	}
 }
