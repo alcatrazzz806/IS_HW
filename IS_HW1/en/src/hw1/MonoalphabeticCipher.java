@@ -1,6 +1,6 @@
 package hw1;
 
-public class MonoalphabeticCipher {
+public class MonoalphabeticCipher implements Cipher {
 	private String keytable = "abcdefghijklmnopqrstuvwxyz";
 	
 	private char getChar(char c, boolean en) {
@@ -22,15 +22,9 @@ public class MonoalphabeticCipher {
 		}
 	}
 	
-	public int setKey(String key) {
-		if (key.length() != 26) {
-			return -1;
-		}
-		else {
-			key = key.toLowerCase();
-			keytable = key;
-			return 0;
-		}
+	public void setKey(String key) {
+		key = key.toLowerCase();
+		keytable = key;
 	}
 	
 	public String encrypt(String plaintext) {

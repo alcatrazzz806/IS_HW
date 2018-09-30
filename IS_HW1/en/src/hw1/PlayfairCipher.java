@@ -1,6 +1,6 @@
 package hw1;
 
-public class PlayfairCipher {
+public class PlayfairCipher implements Cipher {
 	private String key = "abcdefghiklmnopqrstuvwxyz";
 	
 	public void setKey(String newKey) {
@@ -26,7 +26,6 @@ public class PlayfairCipher {
 			key += alphabets.charAt(0);
 			alphabets = alphabets.substring(1);
 		}
-		System.out.println(key);
 	}
 	
 	public String encrypt(String plaintext) {
