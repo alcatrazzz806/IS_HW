@@ -20,16 +20,21 @@ public class VernamCipher implements Cipher {
 			i--; j--;
 		}
 		String xor_bin = xor_bin_sb.toString();
-		return (Character.isLowerCase(c)) ? (char)(Integer.parseInt(xor_bin, 2)%26 + 'a') :
-			(char)(Integer.parseInt(xor_bin, 2)%26 + 'A');
+		return (Character.isLowerCase(c)) ? (char)(Integer.parseInt(xor_bin, 2) + 'a') :
+			(char)(Integer.parseInt(xor_bin, 2) + 'A');
 	}
 
 	public String encrypt(String plaintext) {
 		String ciphertext = "";
 		int keycount = 0;
 		for (int i = 0; i < plaintext.length(); i++) {
-			ciphertext += getChar(plaintext.charAt(i), key.charAt(keycount));
-			keycount = (keycount + 1) % key.length();
+			if (keycount >= key.length()) {
+				ciphertext += getChar(plaintext.charAt(i), Character.toLowerCase(plaintext.charAt(i-key.length())));
+			}
+			else {
+				ciphertext += getChar(plaintext.charAt(i), key.charAt(keycount));
+			}
+			keycount++;
 		}
 		return ciphertext;
 	}
@@ -38,8 +43,13 @@ public class VernamCipher implements Cipher {
 		String plaintext = "";
 		int keycount = 0;
 		for (int i = 0; i < ciphertext.length(); i++) {
-			plaintext += getChar(ciphertext.charAt(i), key.charAt(keycount));
-			keycount = (keycount + 1) % key.length();
+			if (keycount >= key.length()) {
+				plaintext += getChar(ciphertext.charAt(i), Character.toLowerCase(plaintext.charAt(i-key.length())));
+			}
+			else {
+				plaintext += getChar(ciphertext.charAt(i), key.charAt(keycount));
+			}
+			keycount++;
 		}
 		return plaintext;
 	}
