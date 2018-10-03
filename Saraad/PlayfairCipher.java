@@ -120,7 +120,7 @@ public class PlayfairCipher implements Cipher
             // Same row and col
             if ((firstLetterRow == secondLetterRow) && (firstLetterCol == secondLetterCol))
             {
-                int index = 5 * firstLetterRow + (firstLetterCol - 1 + 5) % 5;    // Choose right letter
+                int index = 5 * firstLetterRow + (firstLetterCol - 1 + 5) % 5;    
                 plainText = plainText + keyString.charAt(index) + keyString.charAt(index);
             }
             // Same row, different col
