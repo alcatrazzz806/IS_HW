@@ -15,6 +15,12 @@ public class main
         m.setKey("MNBVCXZLKJHGFDSAPOIUYTREWQ");
         String monoalphabetic_encrpyted = m.encrypt(plainText);
         System.out.println("Monoalphabatic cipher encrypted result: " + monoalphabetic_encrpyted);
-        System.out.println("Monoalphabatic cipher decrypted result: " + m.decrypt(monoalphabetic_encrpyted));    
+        System.out.println("Monoalphabatic cipher decrypted result: " + m.decrypt(monoalphabetic_encrpyted));
+        
+        PlayfairCipher p = new PlayfairCipher();
+        p.setKey("JIMMY");
+        String playfair_encrypted = p.encrypt(plainText);
+        System.out.println("Playfair cipher encrypted result: " + playfair_encrypted);
+        System.out.println("Playfair cipher decrypted result: " + p.decrypt(playfair_encrypted));
     }
 }
