@@ -19,6 +19,7 @@ public class ProductCipher implements Cipher{
 		return ciphertext.toString();
 	}
 	
+	/*
 	public String decrypt(String ciphertext) {
 		char[] plaintext = new char[ciphertext.length()];
 		for (int i = 0; i < plaintext.length; i++) {
@@ -27,5 +28,5 @@ public class ProductCipher implements Cipher{
 		String plaintext_str = new String(plaintext);
 		return plaintext_str;
 	}
-	
+	*/
 }

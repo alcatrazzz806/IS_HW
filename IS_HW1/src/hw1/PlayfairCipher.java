@@ -82,6 +82,7 @@ public class PlayfairCipher implements Cipher {
 		return ciphertext;
 	}
 	
+	/*
 	public String decrypt(String ciphertext) {
 		String remaining = ciphertext;
 		String plaintext = "";
@@ -132,4 +133,5 @@ public class PlayfairCipher implements Cipher {
 		}
 		return plaintext;
 	}
+	*/
 }

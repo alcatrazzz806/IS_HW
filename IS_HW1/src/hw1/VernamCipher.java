@@ -39,6 +39,7 @@ public class VernamCipher implements Cipher {
 		return ciphertext;
 	}
 	
+	/*
 	public String decrypt(String ciphertext) {
 		String plaintext = "";
 		int keycount = 0;
@@ -53,4 +54,5 @@ public class VernamCipher implements Cipher {
 		}
 		return plaintext;
 	}
+	*/
 }

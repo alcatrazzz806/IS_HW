@@ -33,6 +33,7 @@ public class CaesarCipher implements Cipher {
 		return ciphertext;
 	}
 	
+	/*
 	public String decrypt(String ciphertext) {
 		String plaintext = "";
 		for (int i = 0; i < ciphertext.length(); i++) {
@@ -40,4 +41,5 @@ public class CaesarCipher implements Cipher {
 		}
 		return plaintext;
 	}
+	*/
 }

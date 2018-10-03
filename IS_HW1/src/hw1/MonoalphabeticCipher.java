@@ -24,7 +24,7 @@ public class MonoalphabeticCipher implements Cipher {
 	
 	public void setKey(String key) {
 		key = key.toLowerCase();
-		keytable = key;
+		keytable = new StringBuilder(key).reverse().toString();
 	}
 	
 	public String encrypt(String plaintext) {
@@ -35,6 +35,7 @@ public class MonoalphabeticCipher implements Cipher {
 		return ciphertext;
 	}
 	
+	/*
 	public String decrypt(String ciphertext) {
 		String plaintext = "";
 		for (int i = 0; i < ciphertext.length(); i++) {
@@ -42,4 +43,5 @@ public class MonoalphabeticCipher implements Cipher {
 		}
 		return plaintext;
 	}
+	*/
 }
