@@ -18,9 +18,15 @@ public class main
         System.out.println("Monoalphabatic cipher decrypted result: " + m.decrypt(monoalphabetic_encrpyted));
         
         PlayfairCipher p = new PlayfairCipher();
-        p.setKey("JIMMY");
+        p.setKey("HIT");
         String playfair_encrypted = p.encrypt(plainText);
         System.out.println("Playfair cipher encrypted result: " + playfair_encrypted);
         System.out.println("Playfair cipher decrypted result: " + p.decrypt(playfair_encrypted));
+        
+        VernamCipher v = new VernamCipher();
+        v.setKey("CON");
+        String vernam_encrypted = v.encrypt(plainText);
+        System.out.println("Vernam cipher encrypted result: " + vernam_encrypted);
+        System.out.println("Vernam cipher decrypted result: " + v.decrypt(vernam_encrypted));
     }
 }
