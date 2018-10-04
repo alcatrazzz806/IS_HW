@@ -65,7 +65,7 @@ public class RowTransposition implements Cipher
             }
         }
         
-        // Print out grid
+        // Add grid letter to plain text
         for (int i = 0; i < grid.size(); i++)
         {
             plainText = plainText + grid.get(i);
