@@ -1,12 +1,20 @@
+import java.util.Scanner; 
+
 public class main
 {
     public static void main()
     {
-        String plainText = "keepgoingnevergiveup";
+        System.out.println("Please type the plain text:");
+        Scanner scan = new Scanner(System.in);
+        String plainText = scan.next();
+        //String plainText = "keepgoingnevergiveup";
         System.out.println("Plain text: " + plainText);
         
+         System.out.println("Please type the key for caeser cipher (0~25):");
+        String cKey = scan.next();
         CeaserCipher c = new CeaserCipher();
-        c.setKey("7");
+        //c.setKey("7");
+        c.setKey(cKey);
         String caeser_encrpyted = c.encrypt(plainText);
         System.out.println("Caeser cipher encrypted result: " + caeser_encrpyted);
         System.out.println("Caeser cipher decrypted result: " + c.decrypt(caeser_encrpyted));
@@ -34,6 +42,11 @@ public class main
         String rowTransposition_encrypted = r.encrypt(plainText);
         System.out.println("Row transposition cipher encrypted result: " + rowTransposition_encrypted);
         System.out.println("Row transposition cipher decrypted result: " + r.decrypt(rowTransposition_encrypted));
-
+        
+        ProductCipher pr = new ProductCipher();
+        pr.setKey("1511191816030714022004120906010517131008");
+        String product_encrypted = pr.encrypt(plainText);
+        System.out.println("Product cipher encrypted result: " + product_encrypted);
+        System.out.println("Product cipher decrypted result: " + pr.decrypt(product_encrypted));
     }
 }
