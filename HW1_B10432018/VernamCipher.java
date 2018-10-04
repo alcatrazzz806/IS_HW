@@ -1,5 +1,3 @@
-package hw1;
-
 public class VernamCipher implements Cipher {
 	private String key = "";
 	

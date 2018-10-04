@@ -1,5 +1,3 @@
-package hw1;
-
 public class CaesarCipher implements Cipher {
 	private int key = 0;
 	private char getChar(char c,  boolean en) {

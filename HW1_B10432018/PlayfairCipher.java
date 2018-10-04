@@ -1,5 +1,3 @@
-package hw1;
-
 public class PlayfairCipher implements Cipher {
 	private String key = "abcdefghiklmnopqrstuvwxyz";
 	
@@ -30,7 +28,7 @@ public class PlayfairCipher implements Cipher {
 	
 	public String encrypt(String plaintext) {
 		if (plaintext.length() % 2 == 1) {
-			plaintext += 'X';
+			plaintext += 'x';
 		}
 		String remaining = plaintext;
 		String ciphertext = "";

@@ -1,5 +1,3 @@
-package hw1;
-
 public class ProductCipher implements Cipher{
 	private int[] key = null;
 	

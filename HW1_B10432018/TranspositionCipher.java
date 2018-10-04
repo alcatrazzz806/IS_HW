@@ -1,5 +1,3 @@
-package hw1;
-
 public class TranspositionCipher implements Cipher {
 	private String key = "";
 
@@ -11,7 +9,7 @@ public class TranspositionCipher implements Cipher {
 		String ciphertext = "";
 		int cipher_len = (plaintext.length() / key.length() + 1) * key.length();
 		for (int i = plaintext.length()-1; i < cipher_len-1; i++) {
-			plaintext += 'X';
+			plaintext += 'x';
 		}
 		for (int i = 0; i < key.length(); i++) {
 			int pos = Character.getNumericValue(key.charAt(i) - 1);

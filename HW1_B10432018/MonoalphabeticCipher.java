@@ -1,5 +1,3 @@
-package hw1;
-
 public class MonoalphabeticCipher implements Cipher {
 	private String keytable = "abcdefghijklmnopqrstuvwxyz";
 	
