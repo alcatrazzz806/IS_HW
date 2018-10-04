@@ -28,5 +28,12 @@ public class main
         String vernam_encrypted = v.encrypt(plainText);
         System.out.println("Vernam cipher encrypted result: " + vernam_encrypted);
         System.out.println("Vernam cipher decrypted result: " + v.decrypt(vernam_encrypted));
+        
+        RowTransposition r = new RowTransposition();
+        r.setKey("31562487");
+        String rowTransposition_encrypted = r.encrypt(plainText);
+        System.out.println("Row transposition cipher encrypted result: " + rowTransposition_encrypted);
+        System.out.println("Row transposition cipher decrypted result: " + r.decrypt(rowTransposition_encrypted));
+
     }
 }
