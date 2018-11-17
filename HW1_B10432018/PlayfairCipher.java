@@ -28,7 +28,7 @@ public class PlayfairCipher implements Cipher {
 	
 	public String encrypt(String plaintext) {
 		if (plaintext.length() % 2 == 1) {
-			plaintext += 'x';
+			plaintext += 'X';
 		}
 		String remaining = plaintext;
 		String ciphertext = "";
