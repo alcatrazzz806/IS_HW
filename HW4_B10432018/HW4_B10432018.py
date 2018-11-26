@@ -262,7 +262,7 @@ def main():
     r = rsa()
     root = tk.Tk()
     root.title('RSA_B10432018')
-    root.geometry('960x940')
+    root.geometry('940x940')
 
     p_label = tk.Label(root, text='p')
     q_label = tk.Label(root, text='q')
