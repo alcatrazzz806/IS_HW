@@ -40,33 +40,37 @@ class rsa():
         self.d = d if d > 0 else d + phi
         self.dp, self.dq = self.d % (self.p-1), self.d % (self.q-1)
         self.qinv = self.egcd(self.q, self.p) % (self.p)
+        print('p:', f'{self.p:0>{ceil(self.p.bit_length()/8)}X}')
+        print('q:', f'{self.q:0>{ceil(self.q.bit_length()/8)}X}')
+        print('n:', f'{self.n:0>{ceil(self.n.bit_length()/8)}X}')
+        print('phi:', f'{phi:0>{ceil(phi.bit_length()/8)}X}')
         print('e:', f'{self.e:0>{ceil(self.e.bit_length()/8)}X}')
         print('d:', f'{self.d:0>{ceil(self.d.bit_length()/8)}X}')
         print('dp:', f'{self.dp:0>{ceil(self.dp.bit_length()/8)}X}')
         print('dq:', f'{self.dq:0>{ceil(self.dq.bit_length()/8)}X}')
-        print('qinv:', f'{self.qinv:0>{ceil(self.qinv.bit_length()/8)}X}')
+        print('qinv:', f'{self.qinv:0>{ceil(self.qinv.bit_length()/8)}X}','\n')
 
     def gen_key(self, bits, e=65537):
         self.gen_pq(bits)
         self.n = self.p*self.q
         phi = (self.p-1) * (self.q-1)
-        print('n:', f'{self.n:0>{ceil(self.n.bit_length()/8)}X}')
-        print('phi:', f'{phi:0>{ceil(phi.bit_length()/8)}X}')
         if not e:
             e = random.randrange(3, phi-1)
             while gcd(e, phi) != 1:
                 e = random.randrange(3, phi-1)
-        if gcd(e, phi) != 1 and e != 65537:
-            raise PrimalityError
-        elif gcd(e, phi) != 1:
-            e = random.randrange(3, phi-1)
-            while gcd(e, phi) != 1:
-                e = random.randrange(3, phi-1)
+        while gcd(e, phi) != 1:
+            self.gen_pq(bits)
+            self.n = self.p*self.q
+            phi = (self.p-1) * (self.q-1)
         self.e = e
         d = self.egcd(self.e, phi)
         self.d = d if d > 0 else d + phi
         self.dp, self.dq = self.d % (self.p-1), self.d % (self.q-1)
         self.qinv = self.egcd(self.q, self.p) % (self.p)
+        print('p:', f'{self.p:0>{ceil(self.p.bit_length()/8)}X}')
+        print('q:', f'{self.q:0>{ceil(self.q.bit_length()/8)}X}')
+        print('n:', f'{self.n:0>{ceil(self.n.bit_length()/8)}X}')
+        print('phi:', f'{phi:0>{ceil(phi.bit_length()/8)}X}')
         print('e:', f'{self.e:0>{ceil(self.e.bit_length()/8)}X}')
         print('d:', f'{self.d:0>{ceil(self.d.bit_length()/8)}X}')
         print('dp:', f'{self.dp:0>{ceil(self.dp.bit_length()/8)}X}')
@@ -97,8 +101,6 @@ class rsa():
         self.p = self.gen_prime(p_size)
         self.q = self.gen_prime(q_size)
         if self.p < self.q: self.p, self.q = self.q, self.p
-        print('p:', f'{self.p:0>{ceil(self.p.bit_length()/8)}X}')
-        print('q:', f'{self.q:0>{ceil(self.q.bit_length()/8)}X}')
 
     def gen_prime(self, bits):
         isPrime = False
