@@ -18,7 +18,7 @@ class rsa():
     def encrypt(self, plaintext):
         #pt = int(plaintext, 16)
         ans = self.sqr_mul(plaintext, self.e, self.n)
-        return f'{ans:0>{ceil(ans.bit_length()/8)}X}'
+        return ans #f'{ans:0>{ceil(ans.bit_length()/8)}X}'
     
     def decrypt(self, ciphertext):
         #ct = int(ciphertext, 16)
@@ -26,29 +26,37 @@ class rsa():
         m2 = self.sqr_mul(ciphertext, self.dq, self.q)
         h = (self.qinv * (m1-m2)) % self.p
         ans = m2 + h * self.q
-        return f'{ans:0>{ceil(ans.bit_length()/8)}X}'
+        return ans #f'{ans:0>{ceil(ans.bit_length()/8)}X}'
 
     def set_key(self, p, q, e=65537):     
         self.p, self.q, self.n = p, q, p*q
         if self.p < self.q: self.p, self.q = self.q, self.p
         phi = (self.p-1) * (self.q-1)
 
+        if not e:
+            e = random.randrange(3, phi-1)
+            while gcd(e, phi) != 1:
+                e = random.randrange(3, phi-1)
+
         if gcd(e, phi) != 1:
-            raise PrimalityError
+            raise PrimalityError        
         self.e = e
         d = self.egcd(self.e, phi)
         self.d = d if d > 0 else d + phi
         self.dp, self.dq = self.d % (self.p-1), self.d % (self.q-1)
         self.qinv = self.egcd(self.q, self.p) % (self.p)
-        print('p:', f'{self.p:0>{ceil(self.p.bit_length()/8)}X}')
-        print('q:', f'{self.q:0>{ceil(self.q.bit_length()/8)}X}')
-        print('n:', f'{self.n:0>{ceil(self.n.bit_length()/8)}X}')
-        print('phi:', f'{phi:0>{ceil(phi.bit_length()/8)}X}')
-        print('e:', f'{self.e:0>{ceil(self.e.bit_length()/8)}X}')
-        print('d:', f'{self.d:0>{ceil(self.d.bit_length()/8)}X}')
-        print('dp:', f'{self.dp:0>{ceil(self.dp.bit_length()/8)}X}')
-        print('dq:', f'{self.dq:0>{ceil(self.dq.bit_length()/8)}X}')
-        print('qinv:', f'{self.qinv:0>{ceil(self.qinv.bit_length()/8)}X}','\n')
+        
+        '''
+        #print('p:', f'{self.p:0>{ceil(self.p.bit_length()/8)}X}')
+        #print('q:', f'{self.q:0>{ceil(self.q.bit_length()/8)}X}')
+        #print('n:', f'{self.n:0>{ceil(self.n.bit_length()/8)}X}')
+        #print('phi:', f'{phi:0>{ceil(phi.bit_length()/8)}X}')
+        #print('e:', f'{self.e:0>{ceil(self.e.bit_length()/8)}X}')
+        #print('d:', f'{self.d:0>{ceil(self.d.bit_length()/8)}X}')
+        #print('dp:', f'{self.dp:0>{ceil(self.dp.bit_length()/8)}X}')
+        #print('dq:', f'{self.dq:0>{ceil(self.dq.bit_length()/8)}X}')
+        #print('qinv:', f'{self.qinv:0>{ceil(self.qinv.bit_length()/8)}X}','\n')
+        '''
 
     def gen_key(self, bits, e=65537):
         self.gen_pq(bits)
@@ -67,32 +75,35 @@ class rsa():
         self.d = d if d > 0 else d + phi
         self.dp, self.dq = self.d % (self.p-1), self.d % (self.q-1)
         self.qinv = self.egcd(self.q, self.p) % (self.p)
-        print('p:', f'{self.p:0>{ceil(self.p.bit_length()/8)}X}')
-        print('q:', f'{self.q:0>{ceil(self.q.bit_length()/8)}X}')
-        print('n:', f'{self.n:0>{ceil(self.n.bit_length()/8)}X}')
-        print('phi:', f'{phi:0>{ceil(phi.bit_length()/8)}X}')
-        print('e:', f'{self.e:0>{ceil(self.e.bit_length()/8)}X}')
-        print('d:', f'{self.d:0>{ceil(self.d.bit_length()/8)}X}')
-        print('dp:', f'{self.dp:0>{ceil(self.dp.bit_length()/8)}X}')
-        print('dq:', f'{self.dq:0>{ceil(self.dq.bit_length()/8)}X}')
-        print('qinv:', f'{self.qinv:0>{ceil(self.qinv.bit_length()/8)}X}','\n')
+
+        '''
+        #print('p:', f'{self.p:0>{ceil(self.p.bit_length()/8)}X}')
+        #print('q:', f'{self.q:0>{ceil(self.q.bit_length()/8)}X}')
+        #print('n:', f'{self.n:0>{ceil(self.n.bit_length()/8)}X}')
+        #print('phi:', f'{phi:0>{ceil(phi.bit_length()/8)}X}')
+        #print('e:', f'{self.e:0>{ceil(self.e.bit_length()/8)}X}')
+        #print('d:', f'{self.d:0>{ceil(self.d.bit_length()/8)}X}')
+        #print('dp:', f'{self.dp:0>{ceil(self.dp.bit_length()/8)}X}')
+        #print('dq:', f'{self.dq:0>{ceil(self.dq.bit_length()/8)}X}')
+        #print('qinv:', f'{self.qinv:0>{ceil(self.qinv.bit_length()/8)}X}','\n')
+        '''
 
     def get_p(self):
-        return f'{self.p:0>{ceil(self.p.bit_length()/8)}X}'
+        return self.p #f'{self.p:0>{ceil(self.p.bit_length()/8)}X}'
     def get_q(self):
-        return f'{self.q:0>{ceil(self.q.bit_length()/8)}X}'
+        return self.q #f'{self.q:0>{ceil(self.q.bit_length()/8)}X}'
     def get_n(self):
-        return f'{self.n:0>{ceil(self.n.bit_length()/8)}X}'
+        return self.n #f'{self.n:0>{ceil(self.n.bit_length()/8)}X}'
     def get_e(self):
-        return f'{self.e:0>{ceil(self.e.bit_length()/8)}X}'
+        return self.e #f'{self.e:0>{ceil(self.e.bit_length()/8)}X}'
     def get_d(self):
-        return f'{self.d:0>{ceil(self.d.bit_length()/8)}X}'
+        return self.d #f'{self.d:0>{ceil(self.d.bit_length()/8)}X}'
     def get_dp(self):
-        return f'{self.dp:0>{ceil(self.dp.bit_length()/8)}X}'
+        return self.dp #f'{self.dp:0>{ceil(self.dp.bit_length()/8)}X}'
     def get_dq(self):
-        return f'{self.dq:0>{ceil(self.dq.bit_length()/8)}X}'
+        return self.dq #f'{self.dq:0>{ceil(self.dq.bit_length()/8)}X}'
     def get_qinv(self):
-        return f'{self.qinv:0>{ceil(self.qinv.bit_length()/8)}X}'
+        return self.qinv #f'{self.qinv:0>{ceil(self.qinv.bit_length()/8)}X}'
 
     def gen_pq(self, bits):
         p_size = bits // 2
@@ -162,7 +173,7 @@ def main():
             try:
                 int(e, 16)
                 try:
-                    r.gen_key(int(bits), e=int(e,16))
+                    r.gen_key(int(bits), e=int(e))
                     gen = True
                 except PrimalityError:
                     messagebox.showinfo(title='Error', message='e is not coprime with phi!')
@@ -170,7 +181,7 @@ def main():
             except ValueError:
                 messagebox.showinfo(title='Error', message='e is not hexadecimal!')
                 return
-        if not gen: r.gen_key(int(bits))
+        if not gen: r.gen_key(int(bits), e=None)
         p_text.delete(1.0, 'end')
         p_text.insert(1.0, r.get_p())
         q_text.delete(1.0, 'end')
@@ -196,26 +207,26 @@ def main():
             messagebox.showinfo(title='Error', message='p or q is not entered!')
             return
         try:
-            int(p,16)
-            int(q,16)
+            int(p)
+            int(q)
         except ValueError:
-            messagebox.showinfo(title='Error', message='p or q is not hexadecimal!')
+            messagebox.showinfo(title='Error', message='p or q is not decimal!')
             return
         
         e = e_text.get(1.0, 'end-1c')
         if e:
             try:
-                int(e, 16)
+                int(e)
                 try:
-                    r.set_key(int(p,16), int(q,16), e=int(e,16))
+                    r.set_key(int(p), int(q), e=int(e))
                     gen = True
                 except PrimalityError:
                     messagebox.showinfo(title='Error', message='e is not coprime with phi!')
                     return
             except ValueError:
-                messagebox.showinfo(title='Error', message='e is not hexadecimal!')
+                messagebox.showinfo(title='Error', message='e is not decimal!')
                 return
-        if not gen: r.set_key(int(p,16), int(q,16))
+        if not gen: r.set_key(int(p), int(q), e=None)
         p_text.delete(1.0, 'end')
         p_text.insert(1.0, r.get_p())
         q_text.delete(1.0, 'end')
@@ -233,18 +244,18 @@ def main():
         qinv_text.delete(1.0, 'end')
         qinv_text.insert(1.0, r.get_qinv())
         length_text.delete(1.0, 'end')
-        length_text.insert(1.0, len(r.get_n())*4)
+        length_text.insert(1.0, len(bin(r.get_n()))-2)
 
     def enc():
         pt = pt_text.get(1.0, 'end-1c')
         if not pt:
             messagebox.showinfo(title='Error', message='Plaintext is not entered!')
         try:
-            int(pt,16)
+            int(pt)
         except ValueError:
-            messagebox.showinfo(title='Error', message='Plaintext is not hexadecimal!')
+            messagebox.showinfo(title='Error', message='Plaintext is not decimal!')
             return
-        ct = r.encrypt(int(pt,16))
+        ct = r.encrypt(int(pt))
         ct_text.delete(1.0, 'end')
         ct_text.insert(1.0, ct)
 
@@ -253,18 +264,18 @@ def main():
         if not ct:
             messagebox.showinfo(title='Error', message='Ciphertext is not entered!')
         try:
-            int(ct,16)
+            int(ct)
         except ValueError:
-            messagebox.showinfo(title='Error', message='Ciphertext is not hexadecimal!')
+            messagebox.showinfo(title='Error', message='Ciphertext is not decimal!')
             return
-        pt = r.decrypt(int(ct,16))
+        pt = r.decrypt(int(ct))
         pt_text.delete(1.0, 'end')
         pt_text.insert(1.0, pt)
 
     r = rsa()
     root = tk.Tk()
     root.title('RSA_B10432018')
-    root.geometry('940x940')
+    root.geometry('1150x940')
 
     p_label = tk.Label(root, text='p')
     q_label = tk.Label(root, text='q')
@@ -278,17 +289,18 @@ def main():
     pt_label = tk.Label(root, text='Plaintext')
     ct_label = tk.Label(root, text='Ciphertext')
 
-    p_text = tk.Text(root, width=128, height=2)
-    q_text = tk.Text(root, width=128, height=2)
-    n_text = tk.Text(root, width=128, height=4)
-    e_text = tk.Text(root, width=128, height=2)
-    d_text = tk.Text(root, width=128, height=4)
-    dp_text = tk.Text(root, width=128, height=2)
-    dq_text = tk.Text(root, width=128, height=2)
-    qinv_text = tk.Text(root, width=128, height=2)
-    length_text = tk.Text(root, width=128, height=1)
-    pt_text = tk.Text(root, width=128, height=4)
-    ct_text = tk.Text(root, width=128, height=4)
+    p_text = tk.Text(root, width=160, height=2)
+    q_text = tk.Text(root, width=160, height=2)
+    n_text = tk.Text(root, width=160, height=4)
+    e_text = tk.Text(root, width=160, height=2)
+    d_text = tk.Text(root, width=160, height=4)
+    dp_text = tk.Text(root, width=160, height=2)
+    dq_text = tk.Text(root, width=160, height=2)
+    qinv_text = tk.Text(root, width=160, height=2)
+    length_text = tk.Text(root, width=160, height=1)
+    pt_text = tk.Text(root, width=160, height=4)
+    ct_text = tk.Text(root, width=160, height=4)
+    e_text.insert(1.0, chars='65537')
     length_text.insert(1.0, chars='1024')
 
     decButton = tk.Button(root, text='Decrypt', width=20, command=dec)
