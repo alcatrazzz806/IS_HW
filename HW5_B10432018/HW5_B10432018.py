@@ -1,6 +1,6 @@
 import random
-import tkinter as tk
-from tkinter import messagebox
+#import tkinter as tk
+#from tkinter import messagebox
 from math import gcd, ceil
 from hashlib import sha256
 
@@ -18,49 +18,52 @@ class dsa():
             kE = random.randrange(1, self.q)
             hX = int(sha256(str.encode(x)).hexdigest(), 16)
             r = pow(self.a, kE, self.p) % self.q
-            s = ((hX + self.d * r)*self.egcd(self.q, kE)) % self.q
+            i = (self.egcd(kE, self.q) % self.q)
+            s = ((hX + self.d * r)*(self.egcd(kE, self.q)%self.q)) % self.q
+        print('kE:', kE)
+        print('i:', i)
         print('r:', r)
         print('s:', s)
         return r, s
 
     def verify(self, x, r, s):
         hX = int(sha256(str.encode(x)).hexdigest(), 16)
-        w = self.egcd(self.q, s)
+        w = (self.egcd(s, self.q)%self.q)
         u1 = (w * hX) % self.q
         u2 = (w * r) % self.q
-        v = ((pow(self.a, u1, self.p)*pow(self.b, u2, self.p)))%self.q
-        rQ = (r % self.q)
+        v = ((pow(self.a, u1, self.p)*pow(self.b, u2, self.p))%self.p)%self.q
         print('v:', v)
-        print('r mod q:', rQ)
-        return v == rQ
+        print('r:', r)
+        return v == r
 
     def gen_key(self):
-        self.q = self.gen_prime(160)
+        self.q = self.gen_prime(256)
         pIsPrime = False
         while not pIsPrime:    
-            x = random.getrandbits(863) << 1
-            while x.bit_length() != 864:
-                x = random.getrandbits(863) << 1
+            x = random.getrandbits(767) << 1
+            while x.bit_length() != 768:
+                x = random.getrandbits(767) << 1
             self.p  = self.q * x + 1
             pIsPrime = self.miller_rabin(self.p)
         h=2
         while self.a == 1:
             self.a = pow(h, x, self.p)
             h = random.randrange(3, self.p-1)
-        self.d = random.randrange(1,self.p)
+        self.d = random.randrange(1,self.q)
         self.b = pow(self.a, self.d, self.p)
         
         print('p:', self.p)
         print('q:', self.q)
         print('a:', self.a)
         print('b:', self.b)
+        print('d:', self.d)
         
     def gen_prime(self, bits):
         isPrime = False
         while not isPrime:
             ans = random.getrandbits(bits)
             if ans.bit_length() != bits: continue
-            if self.miller_rabin(ans): isPrime = True    
+            isPrime = self.miller_rabin(ans)
         return ans
     
     def miller_rabin(self, n):
