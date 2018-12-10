@@ -1,6 +1,6 @@
 import random
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, scrolledtext
 from math import gcd, ceil
 
 class RSAError(Exception):
@@ -250,6 +250,7 @@ def main():
         pt = pt_text.get(1.0, 'end-1c')
         if not pt:
             messagebox.showinfo(title='Error', message='Plaintext is not entered!')
+            return
         try:
             int(pt)
         except ValueError:
@@ -263,6 +264,7 @@ def main():
         ct = ct_text.get(1.0, 'end-1c')
         if not ct:
             messagebox.showinfo(title='Error', message='Ciphertext is not entered!')
+            return
         try:
             int(ct)
         except ValueError:
@@ -275,38 +277,50 @@ def main():
     r = rsa()
     root = tk.Tk()
     root.title('RSA_B10432018')
-    root.geometry('1150x940')
+    root.geometry('720x600')
 
-    p_label = tk.Label(root, text='p')
-    q_label = tk.Label(root, text='q')
-    n_label = tk.Label(root, text='n')
-    e_label = tk.Label(root, text='e')
-    d_label = tk.Label(root, text='d')
-    dp_label = tk.Label(root, text='dp')
-    dq_label = tk.Label(root, text='dq')
-    qinv_label = tk.Label(root, text='qinv')
-    length_lable = tk.Label(root, text='Bit Length')
-    pt_label = tk.Label(root, text='Plaintext')
-    ct_label = tk.Label(root, text='Ciphertext')
+    canvas = tk.Canvas(root, width=720, height=1000, scrollregion=(0,0,720,1100))
+    frame = tk.Frame(canvas)
+    frame.place(width=720, height=940)
+    
+    scrollbar = tk.Scrollbar(canvas)
+    scrollbar.pack(side='right', fill='y')
+    canvas.create_window((350,550), window=frame)
+    canvas.pack(side='left', fill='both', expand='True')
+    scrollbar.configure(command=canvas.yview)
+    canvas.config(yscrollcommand=scrollbar.set)
+    #frame.config(yscrollcommand=scrollbar.set)
 
-    p_text = tk.Text(root, width=160, height=2)
-    q_text = tk.Text(root, width=160, height=2)
-    n_text = tk.Text(root, width=160, height=4)
-    e_text = tk.Text(root, width=160, height=2)
-    d_text = tk.Text(root, width=160, height=4)
-    dp_text = tk.Text(root, width=160, height=2)
-    dq_text = tk.Text(root, width=160, height=2)
-    qinv_text = tk.Text(root, width=160, height=2)
-    length_text = tk.Text(root, width=160, height=1)
-    pt_text = tk.Text(root, width=160, height=4)
-    ct_text = tk.Text(root, width=160, height=4)
+    p_label = tk.Label(frame, text='p')
+    q_label = tk.Label(frame, text='q')
+    n_label = tk.Label(frame, text='n')
+    e_label = tk.Label(frame, text='e')
+    d_label = tk.Label(frame, text='d')
+    dp_label = tk.Label(frame, text='dp')
+    dq_label = tk.Label(frame, text='dq')
+    qinv_label = tk.Label(frame, text='qinv')
+    length_lable = tk.Label(frame, text='Bit Length')
+    pt_label = tk.Label(frame, text='Plaintext')
+    ct_label = tk.Label(frame, text='Ciphertext')
+
+    p_text = scrolledtext.ScrolledText(frame, width=96, height=2)
+    q_text = scrolledtext.ScrolledText(frame, width=96, height=2)
+    n_text = scrolledtext.ScrolledText(frame, width=96, height=4)
+    e_text = scrolledtext.ScrolledText(frame, width=96, height=2)
+    d_text = scrolledtext.ScrolledText(frame, width=96, height=4)
+    dp_text = scrolledtext.ScrolledText(frame, width=96, height=2)
+    dq_text = scrolledtext.ScrolledText(frame, width=96, height=2)
+    qinv_text = scrolledtext.ScrolledText(frame, width=96, height=2)
+    length_text = scrolledtext.ScrolledText(frame, width=96, height=1)
+    pt_text = scrolledtext.ScrolledText(frame, width=96, height=4)
+    ct_text = scrolledtext.ScrolledText(frame, width=96, height=4)
     e_text.insert(1.0, chars='65537')
     length_text.insert(1.0, chars='1024')
 
-    decButton = tk.Button(root, text='Decrypt', width=20, command=dec)
-    encButton = tk.Button(root, text='Encrypt', width=20, command=enc)
-    genButton = tk.Button(root, text='Gen Key', width=20, command=genKey)
-    setButton = tk.Button(root, text='Set Key', width=20, command=setKey)
+    decButton = tk.Button(frame, text='Decrypt', width=20, command=dec)
+    encButton = tk.Button(frame, text='Encrypt', width=20, command=enc)
+    genButton = tk.Button(frame, text='Gen Key', width=20, command=genKey)
+    setButton = tk.Button(frame, text='Set Key', width=20, command=setKey)
 
     p_label.pack(pady=3)
     p_text.pack(pady=3)
