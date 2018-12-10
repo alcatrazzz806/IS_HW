@@ -13,20 +13,21 @@ class dsa():
         self.d = 0
 
     def sign(self, x):
+        print('Signing...')
         r, s = 0, 0
         while r == 0 or s == 0:
             kE = random.randrange(1, self.q)
             hX = int(sha256(str.encode(x)).hexdigest(), 16)
             r = pow(self.a, kE, self.p) % self.q
-            i = (self.egcd(kE, self.q) % self.q)
             s = ((hX + self.d * r)*(self.egcd(kE, self.q)%self.q)) % self.q
         print('kE:', kE)
-        print('i:', i)
         print('r:', r)
         print('s:', s)
+        print()
         return r, s
 
     def verify(self, x, r, s):
+        print('Verifying...')
         hX = int(sha256(str.encode(x)).hexdigest(), 16)
         w = (self.egcd(s, self.q)%self.q)
         u1 = (w * hX) % self.q
@@ -34,9 +35,14 @@ class dsa():
         v = ((pow(self.a, u1, self.p)*pow(self.b, u2, self.p))%self.p)%self.q
         print('v:', v)
         print('r:', r)
+        if v==r:
+            print('Valid!')
+        else:
+            print('Invalid!')
         return v == r
 
     def gen_key(self):
+        print('Generating Key...')
         self.q = self.gen_prime(256)
         pIsPrime = False
         while not pIsPrime:    
@@ -57,6 +63,7 @@ class dsa():
         print('a:', self.a)
         print('b:', self.b)
         print('d:', self.d)
+        print()
         
     def gen_prime(self, bits):
         isPrime = False
@@ -110,4 +117,4 @@ d = dsa()
 d.gen_key()
 x = '123456'
 r, s = d.sign(x)
-print(d.verify(x, r, s))
+d.verify(x, r, s)
