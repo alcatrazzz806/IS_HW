@@ -58,6 +58,10 @@ class rsa():
         #print('qinv:', f'{self.qinv:0>{ceil(self.qinv.bit_length()/8)}X}','\n')
         '''
 
+    def set_public(self, n, e):
+        self.n = n
+        self.e = e
+
     def gen_key(self, bits, e=65537):
         self.gen_pq(bits)
         self.n = self.p*self.q
@@ -247,6 +251,28 @@ def main():
         length_text.insert(1.0, len(bin(r.get_n()))-2)
 
     def enc():
+        n = n_text.get(1.0, 'end-1c')
+        if not n:
+            messagebox.showinfo(title='Error', message='n is not entered!')
+            return
+        try:
+            int(n)
+        except ValueError:
+            messagebox.showinfo(title='Error', message='n is not decimal!')
+            return
+
+        e = e_text.get(1.0, 'end-1c')
+        if not e:
+            messagebox.showinfo(title='Error', message='e is not entered!')
+            return
+        try:
+            int(e)
+        except ValueError:
+            messagebox.showinfo(title='Error', message='e is not decimal!')
+            return
+        
+        r.set_public(int(n), int(e))
+
         pt = pt_text.get(1.0, 'end-1c')
         if not pt:
             messagebox.showinfo(title='Error', message='Plaintext is not entered!')
