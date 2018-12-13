@@ -2,7 +2,7 @@ import random
 import tkinter as tk
 from tkinter import messagebox, scrolledtext
 from math import gcd, ceil
-from hashlib import sha256
+from hashlib import sha1, sha256
 
 class dsa():
     def __init__(self):
@@ -17,7 +17,7 @@ class dsa():
         r, s = 0, 0
         while r == 0 or s == 0:
             kE = ke if ke else random.randrange(1, self.q)
-            hX = int(sha256(str.encode(x)).hexdigest(), 16)
+            hX = int(sha1(str.encode(x)).hexdigest(), 16)
             r = pow(self.a, kE, self.p) % self.q
             s = ((hX + self.d * r)*(self.egcd(kE, self.q)%self.q)) % self.q
         print('kE:', kE)
@@ -28,7 +28,7 @@ class dsa():
 
     def verify(self, x, r, s):
         print('Verifying...')
-        hX = int(sha256(str.encode(x)).hexdigest(), 16)
+        hX = int(sha1(str.encode(x)).hexdigest(), 16)
         w = (self.egcd(s, self.q)%self.q)
         u1 = (w * hX) % self.q
         u2 = (w * r) % self.q
@@ -52,7 +52,7 @@ class dsa():
                 x = random.getrandbits(p_bit-q_bit-1) << 1
             self.p  = self.q * x + 1
             pIsPrime = self.miller_rabin(self.p)
-        h=2
+        self.a, h = 1, 2
         while self.a == 1:
             self.a = pow(h, x, self.p)
             h = random.randrange(3, self.p-1)
@@ -197,7 +197,7 @@ def main():
 
     def sign():
         m = m_text.get(1.0, 'end-1c')
-        kE = kE_text.get(1.0, 'end-1c')
+        kE = None #kE_text.get(1.0, 'end-1c')
         if not m:
             messagebox.showinfo(title='Error', message='Message is not entered!')
             return
