@@ -52,7 +52,7 @@ class dsa():
                 x = random.getrandbits(p_bit-q_bit-1) << 1
             self.p  = self.q * x + 1
             pIsPrime = self.miller_rabin(self.p)
-        h=2
+        self.a, h = 1, 2
         while self.a == 1:
             self.a = pow(h, x, self.p)
             h = random.randrange(3, self.p-1)
