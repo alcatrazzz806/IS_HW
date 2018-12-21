@@ -121,6 +121,18 @@ class dsa():
                 if b == 1: return False
             return True
 
+    '''
+    def sqr_mul(self, a, b, n):    
+        ans = 1
+        if 1 & b: ans = ans * a % n
+        b >>= 1
+        while b:
+            a = pow(a,2,n)
+            if 1 & b: ans = ans * a % n
+            b >>= 1
+        return ans
+    '''
+
     def egcd(self, a, b):
         (x0, x1, y0, y1) = (1, 0, 0, 1)
         while b != 0:
@@ -133,7 +145,19 @@ class dsa():
 def main():
 
     def genKey():
-        D.gen_key(1024, 160)
+        plen = plen_text.get(1.0, 'end-1c')
+        qlen = qlen_text.get(1.0, 'end-1c')
+        if not plen.isnumeric() or int(plen)<=0:
+            messagebox.showinfo(title='Error', message='Bit length of p is not numeric or too small!')
+            plen_text.delete(1.0, 'end')
+            plen_text.insert(1.0, '1024')
+            plen = plen_text.get(1.0, 'end-1c')
+        if not qlen.isnumeric() or int(qlen)<=0:
+            messagebox.showinfo(title='Error', message='Bit length of q is not numeric or too small!')
+            qlen_text.delete(1.0, 'end')
+            qlen_text.insert(1.0, '160')
+            qlen = qlen_text.get(1.0, 'end-1c')
+        D.gen_key(int(plen), int(qlen))
         p_text.delete(1.0, 'end')
         p_text.insert(1.0, D.get_p())
         q_text.delete(1.0, 'end')
@@ -166,6 +190,10 @@ def main():
         
         b_text.delete(1.0, 'end')
         b_text.insert(1.0, D.get_b())
+        plen_text.delete(1.0, 'end')
+        plen_text.insert(1.0, len(bin(D.get_p()))-2)
+        qlen_text.delete(1.0, 'end')
+        qlen_text.insert(1.0, len(bin(D.get_q()))-2)
 
     def sign():
         m = m_text.get(1.0, 'end-1c')
@@ -226,13 +254,13 @@ def main():
     root.title('DSA_B10432018')
     root.geometry('720x600')
 
-    canvas = tk.Canvas(root, width=720, height=960, scrollregion=(0,0,720,1000))
+    canvas = tk.Canvas(root, width=720, height=1200, scrollregion=(0,0,720,1160))
     frame = tk.Frame(canvas)
-    frame.place(width=720, height=960)
+    frame.place(width=720, height=1200)
     
     scrollbar = tk.Scrollbar(canvas)
     scrollbar.pack(side='right', fill='y')
-    canvas.create_window((350, 500), window=frame)
+    canvas.create_window((350,580), window=frame)
     canvas.pack(side='left', fill='both', expand='True')
     scrollbar.configure(command=canvas.yview)
     canvas.config(yscrollcommand=scrollbar.set)
@@ -242,6 +270,8 @@ def main():
     a_label = tk.Label(frame, text='a')
     b_label = tk.Label(frame, text='b')
     d_label = tk.Label(frame, text='d')
+    plen_label = tk.Label(frame, text='p Bit Length')
+    qlen_label = tk.Label(frame, text='q Bit Length')
     m_label = tk.Label(frame, text='Message')
     kE_label = tk.Label(frame, text='kE')
     r_label = tk.Label(frame, text='r')
@@ -253,11 +283,15 @@ def main():
     a_text = scrolledtext.ScrolledText(frame, width=96, height=1)
     b_text = scrolledtext.ScrolledText(frame, width=96, height=1)
     d_text = scrolledtext.ScrolledText(frame, width=96, height=1)
+    plen_text = scrolledtext.ScrolledText(frame, width=96, height=1)
+    qlen_text = scrolledtext.ScrolledText(frame, width=96, height=1)
     m_text = scrolledtext.ScrolledText(frame, width=96, height=1)
     kE_text = scrolledtext.ScrolledText(frame, width=96, height=1)
     r_text = scrolledtext.ScrolledText(frame, width=96, height=1)
     s_text = scrolledtext.ScrolledText(frame, width=96, height=1)
     v_text = scrolledtext.ScrolledText(frame, width=96, height=1)
+    plen_text.insert(1.0, chars='1024')
+    qlen_text.insert(1.0, chars='160')
 
     signButton = tk.Button(frame, text='Sign', width=20, command=sign)
     verButton = tk.Button(frame, text='Verify', width=20, command=ver)
@@ -278,6 +312,12 @@ def main():
 
     d_label.pack(pady=3)
     d_text.pack(pady=3)
+
+    plen_label.pack(pady=3)
+    plen_text.pack(pady=3)
+
+    qlen_label.pack(pady=3)
+    qlen_text.pack(pady=3)
 
     m_label.pack(pady=3)
     m_text.pack(pady=3)
