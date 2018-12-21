@@ -2,7 +2,7 @@ import random
 import tkinter as tk
 from tkinter import messagebox, scrolledtext
 from math import gcd, ceil
-from hashlib import sha256
+from hashlib import sha256, sha1
 
 class dsa():
     def __init__(self):
@@ -17,7 +17,7 @@ class dsa():
         r, s = 0, 0
         while r == 0 or s == 0:
             kE = ke if ke else random.randrange(1, self.q)
-            hX = int(sha256(str.encode(x)).hexdigest(), 16)
+            hX = int(sha1(str.encode(x)).hexdigest(), 16)
             r = pow(self.a, kE, self.p) % self.q
             s = ((hX + self.d * r)*(self.egcd(kE, self.q)%self.q)) % self.q
         print('kE:', kE)
@@ -28,7 +28,7 @@ class dsa():
 
     def verify(self, x, r, s):
         print('Verifying...')
-        hX = int(sha256(str.encode(x)).hexdigest(), 16)
+        hX = int(sha1(str.encode(x)).hexdigest(), 16)
         w = (self.egcd(s, self.q)%self.q)
         u1 = (w * hX) % self.q
         u2 = (w * r) % self.q
@@ -59,22 +59,6 @@ class dsa():
         self.d = random.randrange(1,self.q)
         self.b = pow(self.a, self.d, self.p)
         
-        print('p:', self.p)
-        print('q:', self.q)
-        print('a:', self.a)
-        print('b:', self.b)
-        print('d:', self.d)
-        print()
-
-    def set_key(self, p, q, a, d):
-        print('Setting Key...')
-        self.p = p
-        self.q = q
-        self.a = a
-        self.d = d
-
-        self.b = pow(self.a, self.d, self.p)
-
         print('p:', self.p)
         print('q:', self.q)
         print('a:', self.a)
@@ -121,18 +105,6 @@ class dsa():
                 if b == 1: return False
             return True
 
-    '''
-    def sqr_mul(self, a, b, n):    
-        ans = 1
-        if 1 & b: ans = ans * a % n
-        b >>= 1
-        while b:
-            a = pow(a,2,n)
-            if 1 & b: ans = ans * a % n
-            b >>= 1
-        return ans
-    '''
-
     def egcd(self, a, b):
         (x0, x1, y0, y1) = (1, 0, 0, 1)
         while b != 0:
@@ -145,19 +117,7 @@ class dsa():
 def main():
 
     def genKey():
-        plen = plen_text.get(1.0, 'end-1c')
-        qlen = qlen_text.get(1.0, 'end-1c')
-        if not plen.isnumeric() or int(plen)<=0:
-            messagebox.showinfo(title='Error', message='Bit length of p is not numeric or too small!')
-            plen_text.delete(1.0, 'end')
-            plen_text.insert(1.0, '1024')
-            plen = plen_text.get(1.0, 'end-1c')
-        if not qlen.isnumeric() or int(qlen)<=0:
-            messagebox.showinfo(title='Error', message='Bit length of q is not numeric or too small!')
-            qlen_text.delete(1.0, 'end')
-            qlen_text.insert(1.0, '160')
-            qlen = qlen_text.get(1.0, 'end-1c')
-        D.gen_key(int(plen), int(qlen))
+        D.gen_key(1024, 160)
         p_text.delete(1.0, 'end')
         p_text.insert(1.0, D.get_p())
         q_text.delete(1.0, 'end')
@@ -169,45 +129,12 @@ def main():
         d_text.delete(1.0, 'end')
         d_text.insert(1.0, D.get_d())
 
-    def setKey():
-        p = p_text.get(1.0, 'end-1c')
-        q = q_text.get(1.0, 'end-1c')
-        a = a_text.get(1.0, 'end-1c')
-        d = d_text.get(1.0, 'end-1c')
-        if not p or not q or not a or not d:
-            messagebox.showinfo(title='Error', message='p, q, a, d is not entered!')
-            return
-        try:
-            int(p)
-            int(q)
-            int(a)
-            int(d)
-        except ValueError:
-            messagebox.showinfo(title='Error', message='p, q, a, d is not decimal!')
-            return
-        
-        D.set_key(int(p), int(q), int(a), int(d))
-        
-        b_text.delete(1.0, 'end')
-        b_text.insert(1.0, D.get_b())
-        plen_text.delete(1.0, 'end')
-        plen_text.insert(1.0, len(bin(D.get_p()))-2)
-        qlen_text.delete(1.0, 'end')
-        qlen_text.insert(1.0, len(bin(D.get_q()))-2)
-
     def sign():
         m = m_text.get(1.0, 'end-1c')
-        kE = kE_text.get(1.0, 'end-1c')
         if not m:
             messagebox.showinfo(title='Error', message='Message is not entered!')
             return
-        if kE:
-            try:
-                int(kE)
-            except ValueError:
-                messagebox.showinfo(title='Error', message='kE is not decimal!')
-                return
-        kE, r, s = D.sign(m, ke=int(kE)) if kE else D.sign(m)
+        kE, r, s = D.sign(m)
         kE_text.delete(1.0, 'end')
         kE_text.insert(1.0, kE)
         r_text.delete(1.0, 'end')
@@ -254,13 +181,13 @@ def main():
     root.title('DSA_B10432018')
     root.geometry('720x600')
 
-    canvas = tk.Canvas(root, width=720, height=1200, scrollregion=(0,0,720,1160))
+    canvas = tk.Canvas(root, width=720, height=900, scrollregion=(0,0,720,950))
     frame = tk.Frame(canvas)
-    frame.place(width=720, height=1200)
+    frame.place(width=720, height=900)
     
     scrollbar = tk.Scrollbar(canvas)
     scrollbar.pack(side='right', fill='y')
-    canvas.create_window((350,580), window=frame)
+    canvas.create_window((350,470), window=frame)
     canvas.pack(side='left', fill='both', expand='True')
     scrollbar.configure(command=canvas.yview)
     canvas.config(yscrollcommand=scrollbar.set)
@@ -270,8 +197,6 @@ def main():
     a_label = tk.Label(frame, text='a')
     b_label = tk.Label(frame, text='b')
     d_label = tk.Label(frame, text='d')
-    plen_label = tk.Label(frame, text='p Bit Length')
-    qlen_label = tk.Label(frame, text='q Bit Length')
     m_label = tk.Label(frame, text='Message')
     kE_label = tk.Label(frame, text='kE')
     r_label = tk.Label(frame, text='r')
@@ -283,20 +208,15 @@ def main():
     a_text = scrolledtext.ScrolledText(frame, width=96, height=1)
     b_text = scrolledtext.ScrolledText(frame, width=96, height=1)
     d_text = scrolledtext.ScrolledText(frame, width=96, height=1)
-    plen_text = scrolledtext.ScrolledText(frame, width=96, height=1)
-    qlen_text = scrolledtext.ScrolledText(frame, width=96, height=1)
     m_text = scrolledtext.ScrolledText(frame, width=96, height=1)
     kE_text = scrolledtext.ScrolledText(frame, width=96, height=1)
     r_text = scrolledtext.ScrolledText(frame, width=96, height=1)
     s_text = scrolledtext.ScrolledText(frame, width=96, height=1)
     v_text = scrolledtext.ScrolledText(frame, width=96, height=1)
-    plen_text.insert(1.0, chars='1024')
-    qlen_text.insert(1.0, chars='160')
 
     signButton = tk.Button(frame, text='Sign', width=20, command=sign)
     verButton = tk.Button(frame, text='Verify', width=20, command=ver)
     genButton = tk.Button(frame, text='Gen Key', width=20, command=genKey)
-    setButton = tk.Button(frame, text='Set Key', width=20, command=setKey)
 
     p_label.pack(pady=3)
     p_text.pack(pady=3)
@@ -312,12 +232,6 @@ def main():
 
     d_label.pack(pady=3)
     d_text.pack(pady=3)
-
-    plen_label.pack(pady=3)
-    plen_text.pack(pady=3)
-
-    qlen_label.pack(pady=3)
-    qlen_text.pack(pady=3)
 
     m_label.pack(pady=3)
     m_text.pack(pady=3)
@@ -336,7 +250,6 @@ def main():
     verButton.pack(side='bottom', pady=5)
     signButton.pack(side='bottom', pady=5)
     genButton.pack(side='bottom', pady=5)
-    setButton.pack(side='bottom', pady=5)
 
     root.mainloop()
 
