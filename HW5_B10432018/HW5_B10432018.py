@@ -19,6 +19,7 @@ class dsa():
             kE = ke if ke else random.randrange(1, self.q)
             hX = int(sha1(str.encode(x)).hexdigest(), 16)
             r = pow(self.a, kE, self.p) % self.q
+            # (self.egcd(kE, self.q)%self.q): kE's multipicative inverse under mod q
             s = ((hX + self.d * r)*(self.egcd(kE, self.q)%self.q)) % self.q
         print('kE:', kE)
         print('r:', r)
@@ -28,6 +29,8 @@ class dsa():
 
     def verify(self, x, r, s):
         print('Verifying...')
+
+        # Compute auxiliary values
         hX = int(sha1(str.encode(x)).hexdigest(), 16)
         w = (self.egcd(s, self.q)%self.q)
         u1 = (w * hX) % self.q
@@ -35,6 +38,8 @@ class dsa():
         v = ((pow(self.a, u1, self.p)*pow(self.b, u2, self.p))%self.p)%self.q
         print('v:', v)
         print('r:', r)
+
+        # v equals r (mod q)
         if v==r:
             print('Valid!')
         else:
@@ -45,18 +50,24 @@ class dsa():
     def gen_key(self, p_bit, q_bit):
         print('Generating Key...')
         self.q = self.gen_prime(q_bit)
+
+        # Test if prime by miller-rabin
         pIsPrime = False
         while not pIsPrime:    
             x = random.getrandbits(p_bit-q_bit-1) << 1
             while x.bit_length() != p_bit-q_bit:
                 x = random.getrandbits(p_bit-q_bit-1) << 1
+            # So that q divides (p - 1)   
             self.p  = self.q * x + 1
             pIsPrime = self.miller_rabin(self.p)
+
+        # Choose alpha, d to compute beta
+        # alpha: smallest positive integer such that alpha ^ q = 1 (mod p)
         self.a, h = 1, 2
         while self.a == 1:
             self.a = pow(h, x, self.p)
             h = random.randrange(3, self.p-1)
-        self.d = random.randrange(1,self.q)
+        self.d = random.randrange(1, self.q)
         self.b = pow(self.a, self.d, self.p)
         
         print('p:', self.p)
@@ -77,6 +88,7 @@ class dsa():
     def get_d(self):
         return self.d
 
+    # Generate large prime number (tested with miller-rabin)
     def gen_prime(self, bits):
         isPrime = False
         while not isPrime:
@@ -117,6 +129,7 @@ class dsa():
 def main():
 
     def genKey():
+        # 1024 bits for p, 160 bits for q
         D.gen_key(1024, 160)
         p_text.delete(1.0, 'end')
         p_text.insert(1.0, D.get_p())
@@ -176,6 +189,7 @@ def main():
         else:
             messagebox.showinfo(title='Invalid', message='This message is invalid!')
 
+    # Main function starts here
     D = dsa()
     root = tk.Tk()
     root.title('DSA_B10432018')
